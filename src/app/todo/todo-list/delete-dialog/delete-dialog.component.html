@@ -1,0 +1,9 @@
+<h1 mat-dialog-title>{{todo.title}} löschen</h1>
+<div mat-dialog-content>
+  Möchten Sie das Todo tatsächlich löschen?
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close>Nein</button>
+  <span class="spacer"></span>
+  <button mat-button mat-dialog-close cdkFocusInitial (click)="deleteTodo()">Ja</button>
+</div>
