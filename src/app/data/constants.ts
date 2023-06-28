@@ -8,4 +8,10 @@ export class Constants {
     todoNew: 'todo/new',
     todoEdit: 'todo/edit/:id',
   };
+  static auth = {
+    adminRole: 'admin',
+  };
+  static todo = {
+    displayedColumns: ['id', 'title', 'description', 'closed', 'functions'],
+  };
 }
