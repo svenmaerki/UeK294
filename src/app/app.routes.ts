@@ -6,6 +6,7 @@ import { LoginComponent } from './auth/login/login.component';
 import { UnauthorizedComponent } from './base/unauthorized/unauthorized.component';
 import { TodoListComponent } from './todo/todo-list/todo-list.component';
 import { TodoFormComponent } from './todo/todo-form/todo-form.component';
+import { LoggedInGuard } from './auth/guard/logged-in.guard';
 
 export const routes: Routes = [
   { path: Constants.routes.home, component: HomeComponent },
@@ -14,17 +15,17 @@ export const routes: Routes = [
   {
     path: Constants.routes.todoList,
     component: TodoListComponent,
-    // TODO: Add LoggedInGuard
+    canActivate: [LoggedInGuard],
   },
   {
     path: Constants.routes.todoNew,
     component: TodoFormComponent,
-    // TODO: Add LoggedInGuard
+    canActivate: [LoggedInGuard],
   },
   {
     path: Constants.routes.todoEdit,
     component: TodoFormComponent,
-    // TODO: Add LoggedInGuard
+    canActivate: [LoggedInGuard],
   },
   { path: '**', component: NotFoundComponent },
 ];
