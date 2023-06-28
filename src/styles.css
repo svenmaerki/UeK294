@@ -1,0 +1,36 @@
+body {
+  font-family: Verdana, sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.content {
+  margin: 10px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.mat-card-content {
+  margin-top: 10px;
+}
+
+.mat-mdc-card-header {
+  background: #3f51b5;
+  color: #fff;
+}
+
+.mat-mdc-card-footer {
+  background: #303f9f;
+  color: #fff;
+  padding: 5px 5px;
+}
