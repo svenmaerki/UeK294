@@ -1,0 +1,38 @@
+<mat-card>
+  <ng-container *ngIf="todo$ | async as todo">
+    <mat-card-header>
+      <h3>{{todo.id ? 'Todo mit ID ' + todo.id + ' bearbeiten' : 'Todo erstellen'}}</h3>
+    </mat-card-header>
+
+    <mat-card-content class="content">
+      <form class="form" [formGroup]="form">
+        <mat-form-field *ngIf="todo.id" class="full-width">
+          <mat-label>Id</mat-label>
+          <input matInput [value]="todo.id.toString()" type="text" disabled>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-label>Titel</mat-label>
+          <input matInput type="text" formControlName="title">
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-label>Beschreibung</mat-label>
+          <input matInput type="text" formControlName="description">
+        </mat-form-field>
+
+        <mat-checkbox *ngIf="todo.id" formControlName="closed">Erledigt *</mat-checkbox>
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-raised-button color="warn" [routerLink]="'/' + Constants.routes.todo">Abbrechen</button>
+
+      <span class="spacer"></span>
+
+      <button mat-raised-button color="primary" (click)="save(todo.id)" [disabled]="!form.valid">
+        Speichern
+      </button>
+    </mat-card-actions>
+  </ng-container>
+</mat-card>

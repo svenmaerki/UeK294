@@ -1,0 +1,36 @@
+<mat-card>
+  <mat-card-header>
+    <h3>Login</h3>
+    <span class="spacer"></span>
+    <button
+      *ngIf="authService.loggedIn$ | async"
+      mat-flat-button
+      color="warn"
+      (click)="authService.logout(Constants.routes.home)"
+    >
+      logout
+    </button>
+  </mat-card-header>
+  <mat-card-content class="content">
+    <form class="form" [formGroup]="form">
+      <mat-form-field class="full-width">
+        <mat-label>username</mat-label>
+        <input matInput placeholder="user" type="text" formControlName="username">
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <mat-label>password</mat-label>
+        <input matInput placeholder="12345" type="password" formControlName="password">
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+  <mat-card-actions>
+    <button
+      *ngIf="form?.valid"
+      mat-flat-button
+      color="primary"
+      (click)="login()"
+    >
+      login
+    </button>
+  </mat-card-actions>
+</mat-card>

@@ -1,0 +1,66 @@
+<mat-card>
+  <mat-card-header>
+    <h3>Todos</h3>
+
+    <span class="spacer"></span>
+
+    <button mat-raised-button color="warn" [routerLink]="'/' + Constants.routes.todoNew">
+      <mat-icon>add</mat-icon>
+      <span>Todo erstellen</span>
+    </button>
+  </mat-card-header>
+
+  <mat-card-content class="content">
+
+    <ng-container *ngIf="todos$ | async as todos; else loading">
+
+      <table mat-table [dataSource]="todos" class="mat-elevation-z8">
+
+        <ng-container matColumnDef="id">
+          <th mat-header-cell class="white-text" *matHeaderCellDef> ID</th>
+          <td mat-cell *matCellDef="let todo;"> {{todo.id}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="title">
+          <th mat-header-cell class="white-text" *matHeaderCellDef> Titel</th>
+          <td mat-cell *matCellDef="let todo;"> {{todo.title}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="description">
+          <th mat-header-cell class="white-text" *matHeaderCellDef> Beschreibung</th>
+          <td mat-cell *matCellDef="let todo;"> {{todo.description}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="closed">
+          <th mat-header-cell class="white-text" *matHeaderCellDef> Status</th>
+          <td mat-cell *matCellDef="let todo;" [ngClass]="todo.closed ? 'closed' : 'open'">
+            <mat-checkbox [checked]="!!todo.closed" disabled></mat-checkbox>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="functions">
+          <th mat-header-cell class="white-text" *matHeaderCellDef> Funktionen</th>
+          <td mat-cell *matCellDef="let todo;">
+            <button mat-icon-button color="primary" [routerLink]="'/' + Constants.routes.todoEditId(todo.id)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button *ngIf="authService.isMemberOf(Constants.auth.adminRole) | async" mat-icon-button color="warn"
+                    (click)="openDeleteDialog(todo)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row class="row-header" *matHeaderRowDef="Constants.todo.displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; let i = index; columns: Constants.todo.displayedColumns;"
+            [ngClass]="i % 2 === 0 ? 'even-row' : 'odd-row'"></tr>
+      </table>
+
+    </ng-container>
+
+    <ng-template #loading>
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </ng-template>
+
+  </mat-card-content>
+</mat-card>

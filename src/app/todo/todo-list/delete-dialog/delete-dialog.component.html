@@ -1,0 +1,9 @@
+<h1 mat-dialog-title>Löschen</h1>
+<div mat-dialog-content>
+  Soll das TodoItem mit der Id {{todo.id}} wirklich gelöscht werden?
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close>Abbrechen</button>
+  <span class="spacer"></span>
+  <button mat-button mat-dialog-close cdkFocusInitial (click)="deleteTodo()">Ok</button>
+</div>

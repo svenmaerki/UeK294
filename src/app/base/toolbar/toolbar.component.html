@@ -1,0 +1,25 @@
+<mat-toolbar color="primary">
+  <button mat-icon-button aria-label="Home" [routerLink]="Constants.routes.home">
+    <mat-icon>home</mat-icon>
+  </button>
+
+  <ng-container *ngIf="authService.loggedIn$ | async; else loginBlock">
+    <button mat-icon-button aria-label="Login" [routerLink]="Constants.routes.todo">
+      <mat-icon>format_list_bulleted</mat-icon>
+    </button>
+
+    <span class="spacer"></span>
+
+    <button mat-icon-button aria-label="Logout" (click)="authService.logout('/' + Constants.routes.home)">
+      <mat-icon>logout</mat-icon>
+    </button>
+  </ng-container>
+
+  <ng-template #loginBlock>
+    <span class="spacer"></span>
+
+    <button mat-icon-button aria-label="Login" [routerLink]="Constants.routes.login">
+      <mat-icon>login</mat-icon>
+    </button>
+  </ng-template>
+</mat-toolbar>
