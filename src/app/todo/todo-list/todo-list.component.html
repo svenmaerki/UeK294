@@ -12,7 +12,7 @@
 
   <mat-card-content class="content">
 
-    <ng-container *ngIf="todos$ | async as todos; else loading">
+    <ng-container *ngIf="todoService.todos$ | async as todos; else loading">
 
       <table mat-table [dataSource]="todos" class="mat-elevation-z8">
 

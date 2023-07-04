@@ -77,8 +77,8 @@ export class TodoFormComponent implements OnInit {
   protected save(id: number | null = null) {
     const todoForm = this.form.value as TodoForm;
     if (id) {
-      const updateTodo = this.mapToUpdateTodo(todoForm);
-      this.todoService.updateTodoById(id, updateTodo);
+      const updateTodo = this.mapToUpdateTodo(id, todoForm);
+      this.todoService.updateTodoById(updateTodo);
     } else {
       const createTodo = this.mapToCreateTodo(todoForm);
       this.todoService.createTodo(createTodo);
@@ -87,8 +87,9 @@ export class TodoFormComponent implements OnInit {
     this.router.navigateByUrl(Constants.routes.todo).finally();
   }
 
-  private mapToUpdateTodo(todo: TodoForm): UpdateTodoDto {
+  private mapToUpdateTodo(id: number, todo: TodoForm): UpdateTodoDto {
     return {
+      id,
       title: todo.title,
       description: todo.description,
       closed: todo.closed,

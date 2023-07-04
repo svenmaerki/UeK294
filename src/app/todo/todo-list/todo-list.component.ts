@@ -4,7 +4,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { TodoService } from '../service/todo.service';
-import { Observable } from 'rxjs';
 import { TodoDto } from '../dto/todo.dto';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatIconModule } from '@angular/material/icon';
@@ -35,14 +34,12 @@ import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
 export class TodoListComponent implements OnInit {
   protected readonly Constants = Constants;
 
-  private readonly todoService = inject(TodoService);
   private readonly dialog = inject(MatDialog);
   protected readonly authService = inject(AuthService);
-
-  protected todos$: Observable<TodoDto[]> | undefined;
+  protected readonly todoService = inject(TodoService);
 
   ngOnInit() {
-    this.todos$ = this.todoService.getTodos();
+    this.todoService.loadTodos();
   }
 
   protected openDeleteDialog(todo: TodoDto) {

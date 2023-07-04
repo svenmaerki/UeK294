@@ -8,10 +8,11 @@ import {
 } from '@angular/platform-browser/animations';
 import { tokenInterceptor } from './auth/interceptor/token.interceptor';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    importProvidersFrom(BrowserAnimationsModule),
+    importProvidersFrom(BrowserAnimationsModule, MatSnackBarModule),
     provideHttpClient(withInterceptors([tokenInterceptor])),
     provideRouter(routes),
     provideAnimations(),
