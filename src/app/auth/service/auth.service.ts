@@ -22,12 +22,8 @@ export class AuthService {
   private readonly router = inject(Router);
   private readonly http = inject(HttpClient);
 
-  private _tokenInfo$: BehaviorSubject<TokenInfo | null> =
-    new BehaviorSubject<TokenInfo | null>(null);
-
-  private _loggedIn$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-    false
-  );
+  private _tokenInfo$ = new BehaviorSubject<TokenInfo | null>(null);
+  private _loggedIn$ = new BehaviorSubject<boolean>(false);
 
   get loggedIn$(): Observable<boolean> {
     return this._loggedIn$.asObservable();
