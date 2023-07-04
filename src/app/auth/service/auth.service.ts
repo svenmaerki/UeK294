@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, Observable, of, tap } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { BehaviorSubject, map, Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { LoginDto } from '../dto/login.dto';
-import { BearerDto } from '../dto/bearer.dto';
 import { Constants } from '../../data/constants';
+import { HttpClient } from '@angular/common/http';
+import { BearerDto } from '../dto/bearer.dto';
 
 export interface TokenInfo {
   token: string;
@@ -17,12 +18,9 @@ export interface TokenInfo {
   providedIn: 'root',
 })
 export class AuthService {
-  private static readonly MOCK_TOKEN =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJzdWIiOjEsInJvbGVzIjpbInVzZXIiXSwicmlnaHRzIjpbInByb2ZpbGVHZXRQcm9maWxlIiwiYmFzZUJhc2VGaW5kIiwiYmFzZUJhc2VGaW5kT25lQnkiLCJiYXNlQmFzZUNyZWF0ZSIsImJhc2VCYXNlVXBkYXRlIiwiYmFzZUJhc2VSZXBsYWNlIl0sImlhdCI6MTY4Nzk0MjQ3OSwiZXhwIjoxNjg3OTQyNzc5LCJpc3MiOiJJQ1QtVWVrIn0.2pTpaI63Ylf4IpLIGuTqyhq1yxCDNy4d790lxOyPBUo';
-
   private readonly baseUrl = Constants.baseServerUrl + '/auth';
-
-  constructor(private readonly router: Router) {}
+  private readonly router = inject(Router);
+  private readonly http = inject(HttpClient);
 
   private _tokenInfo$: BehaviorSubject<TokenInfo | null> =
     new BehaviorSubject<TokenInfo | null>(null);
@@ -41,8 +39,7 @@ export class AuthService {
 
   public login(login: LoginDto, nextUrl: string) {
     this.logout(null);
-    const TOKEN_MOCK_RESPONSE: BearerDto = { token: AuthService.MOCK_TOKEN };
-    return of(TOKEN_MOCK_RESPONSE).pipe(
+    return this.http.post<BearerDto>(`${this.baseUrl}/login`, login).pipe(
       tap((dto) => {
         this.loadToken(dto.token);
         if (this._tokenInfo$.value) {
