@@ -59,12 +59,8 @@ export class TodoService {
     return of(TodoService.MOCK_TODOS);
   }
 
-  public getTodoById(id: number): Observable<TodoDto | null> {
-    const todo = TodoService.MOCK_TODOS.find((t) => t.id === id);
-    if (todo) {
-      return of(todo);
-    }
-    return of(null);
+  public getTodoById(id: number): Observable<TodoDto | undefined> {
+    return of(TodoService.MOCK_TODOS.find((t) => t.id === id));
   }
 
   public createTodo(todo: CreateTodoDto): void {

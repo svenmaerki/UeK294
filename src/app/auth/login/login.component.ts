@@ -23,7 +23,6 @@ import {
     ReactiveFormsModule,
   ],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
   protected readonly Constants = Constants;
@@ -44,7 +43,7 @@ export class LoginComponent implements OnInit {
 
     const { username, password } = this.form.value;
     this.authService
-      .login({ username, password }, Constants.routes.todoList)
+      .login({ username, password }, Constants.routes.todo)
       .subscribe();
   }
 }

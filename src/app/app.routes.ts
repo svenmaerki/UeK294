@@ -13,6 +13,11 @@ export const routes: Routes = [
   { path: Constants.routes.login, component: LoginComponent },
   { path: Constants.routes.unauthorized, component: UnauthorizedComponent },
   {
+    path: Constants.routes.todo,
+    redirectTo: Constants.routes.todoList,
+    pathMatch: 'full',
+  },
+  {
     path: Constants.routes.todoList,
     component: TodoListComponent,
     canActivate: [LoggedInGuard],

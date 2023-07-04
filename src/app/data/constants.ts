@@ -4,9 +4,11 @@ export class Constants {
     home: '',
     login: 'auth/login',
     unauthorized: 'unauthorized',
-    todoList: 'todo',
+    todo: 'todo',
+    todoList: 'todo/list',
     todoNew: 'todo/new',
     todoEdit: 'todo/edit/:id',
+    todoEditId: (id: number) => `todo/edit/${id}`,
   };
   static auth = {
     adminRole: 'admin',
