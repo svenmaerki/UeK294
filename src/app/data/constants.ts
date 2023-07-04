@@ -1,5 +1,5 @@
 export class Constants {
-  static baseServerUrl = 'http://localhost:3010';
+  static baseServerUrl = 'https://api-demo.ict-uek.ch';
   static routes = {
     home: '',
     login: 'auth/login',

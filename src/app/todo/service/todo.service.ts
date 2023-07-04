@@ -15,9 +15,7 @@ export class TodoService {
   private snackBar = inject(MatSnackBar);
   private todoUrl = Constants.baseServerUrl + '/todo';
 
-  private _todos$: BehaviorSubject<TodoDto[]> = new BehaviorSubject<TodoDto[]>(
-    []
-  );
+  private _todos$ = new BehaviorSubject<TodoDto[]>([]);
 
   get todos$(): Observable<TodoDto[]> {
     return this._todos$.asObservable();
