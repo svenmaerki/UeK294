@@ -4,7 +4,7 @@
   </button>
 
   <ng-container *ngIf="authService.loggedIn$ | async; else loginBlock">
-    <button mat-icon-button aria-label="Login" [routerLink]="Constants.routes.todoList">
+    <button mat-icon-button aria-label="Login" [routerLink]="Constants.routes.todo">
       <mat-icon>format_list_bulleted</mat-icon>
     </button>
 
