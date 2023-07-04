@@ -1,91 +1,96 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Constants } from '../../data/constants';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { TodoDto } from '../dto/todo.dto';
 import { CreateTodoDto } from '../dto/create-todo.dto';
 import { UpdateTodoDto } from '../dto/update-todo.dto';
+import { HttpClient } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TodoService {
+  private http = inject(HttpClient);
+  private snackBar = inject(MatSnackBar);
   private todoUrl = Constants.baseServerUrl + '/todo';
-  private static MOCK_TODOS: TodoDto[] = [
-    {
-      id: 1,
-      title: 'Todo 1',
-      description: 'Description 1',
-      closed: false,
-    },
-    {
-      id: 2,
-      title: 'Todo 2',
-      description: 'Description 2',
-      closed: false,
-    },
-    {
-      id: 3,
-      title: 'Todo 3',
-      description: 'Description 3',
-      closed: true,
-    },
-    {
-      id: 4,
-      title: 'Todo 4',
-      description: 'Description 4',
-      closed: false,
-    },
-    {
-      id: 5,
-      title: 'Todo 5',
-      description: 'Description 5',
-      closed: true,
-    },
-    {
-      id: 6,
-      title: 'Todo 6',
-      description: 'Description 6',
-      closed: true,
-    },
-    {
-      id: 7,
-      title: 'Todo 7',
-      description: 'Description 7',
-      closed: true,
-    },
-  ];
 
-  public getTodos(): Observable<TodoDto[]> {
-    return of(TodoService.MOCK_TODOS);
+  private _todos$: BehaviorSubject<TodoDto[]> = new BehaviorSubject<TodoDto[]>(
+    []
+  );
+
+  get todos$(): Observable<TodoDto[]> {
+    return this._todos$.asObservable();
   }
 
-  public getTodoById(id: number): Observable<TodoDto | undefined> {
-    return of(TodoService.MOCK_TODOS.find((t) => t.id === id));
-  }
-
-  public createTodo(todo: CreateTodoDto): void {
-    const highestId = Math.max(...TodoService.MOCK_TODOS.map((t) => t.id));
-    TodoService.MOCK_TODOS.push({
-      ...todo,
-      id: highestId + 1,
-      closed: false,
+  public loadTodos(): void {
+    this.http.get<TodoDto[]>(this.todoUrl).subscribe({
+      next: (todos) => {
+        this._todos$.next(todos);
+      },
+      error: (err) => {
+        this.showSnackBar('Fehler beim Laden der Todos', err);
+      },
     });
   }
 
-  public updateTodoById(id: number, todo: UpdateTodoDto): void {
-    const index = TodoService.MOCK_TODOS.findIndex((t) => t.id === id);
-    if (index !== -1) {
-      TodoService.MOCK_TODOS[index] = {
-        ...TodoService.MOCK_TODOS[index],
-        ...todo,
-      };
+  public getTodoById(id: number): Observable<TodoDto | undefined> {
+    const todo = this._todos$.value.find((todo) => todo.id === id);
+    if (todo) {
+      return of(todo);
+    } else {
+      this.showSnackBar('Todo nicht gefunden', {
+        message: `Todo with ID ${id} not found`,
+      });
     }
+    return of(undefined);
+  }
+
+  public createTodo(createTodoDto: CreateTodoDto): void {
+    this.http.post<TodoDto>(this.todoUrl, createTodoDto).subscribe({
+      next: (todo) => {
+        this._todos$.next([...this._todos$.value, todo]);
+      },
+      error: (err) => {
+        this.showSnackBar('Fehler beim Erstellen des Todos', err);
+      },
+    });
+  }
+
+  public updateTodoById(updateTodoDto: UpdateTodoDto): void {
+    this.http
+      .put<TodoDto>(`${this.todoUrl}/${updateTodoDto.id}`, updateTodoDto)
+      .subscribe({
+        next: (todo) => {
+          this._todos$.next(
+            this._todos$.value.map((todo) =>
+              todo.id === updateTodoDto.id ? todo : todo
+            )
+          );
+        },
+        error: (err) => {
+          this.showSnackBar('Fehler beim Updaten des Todos', err);
+        },
+      });
   }
 
   public deleteTodoById(id: number): void {
-    const index = TodoService.MOCK_TODOS.findIndex((t) => t.id === id);
-    if (index !== -1) {
-      TodoService.MOCK_TODOS.splice(index, 1);
-    }
+    this.http.delete<void>(`${this.todoUrl}/${id}`).subscribe({
+      next: () => {
+        this._todos$.next(this._todos$.value.filter((todo) => todo.id !== id));
+      },
+      error: (err) => {
+        this.showSnackBar('Fehler beim Löschen des Todos', err);
+      },
+    });
+  }
+
+  private showSnackBar(message: string, err: any): void {
+    const errorMessage = `${message}: ${err.message}`;
+    this.snackBar.open(errorMessage, 'OK', {
+      duration: 5000,
+      horizontalPosition: 'start',
+      verticalPosition: 'bottom',
+    });
   }
 }
